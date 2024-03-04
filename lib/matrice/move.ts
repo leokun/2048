@@ -1,6 +1,6 @@
-type direction = 'up' | 'down' | 'left' | 'right'
+export type Direction = 'up' | 'down' | 'left' | 'right'
 
-export function move(direction: direction, matrice: number[][]): number[][] {
+export function move(direction: Direction, matrice: number[][]): number[][] {
     let newMatrice: number[][] = matrice
 
     if (direction == 'up') {

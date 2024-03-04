@@ -1,4 +1,4 @@
-import { forTesting, move } from '@/lib/moveMatrice'
+import { forTesting, move } from '@/lib/matrice/move'
 import { test, expect } from 'vitest'
 
 const matrice =  () => [
