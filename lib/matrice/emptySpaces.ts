@@ -1,4 +1,6 @@
 export function populateEmptyTile(matrice: number[][]): number[][] {
+    if (isFull(matrice)) return matrice
+    
     const emptyTiles = getEmptyTiles(matrice)
     const newMatrice = [...matrice]
     const selectedEmptyTileIndex = Math.floor(Math.random() * emptyTiles.length);
