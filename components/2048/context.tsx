@@ -9,6 +9,7 @@ import {
 } from "react";
 import Matrice from ".";
 import { fp } from "@/lib";
+import { total } from "@/lib/matrice/sub";
 
 type Matrice = number[][];
 
@@ -43,8 +44,6 @@ export function GameContextProvider({ children }: PropsWithChildren) {
     };
     document.addEventListener("keydown", handleKeyDown);
 
-    console.log(`PuseEffect pre newGame ${gameStore.matrice}`)
-    // moved from default value of useState to avoid hydratation mismatch
     isEmpty(gameStore.matrice) && dispatch({ type: "newGame" });
 
     return () => document.removeEventListener("keydown", handleKeyDown);
@@ -67,15 +66,23 @@ type ReducerAction =
   | { type: "newGame" };
 
 function gameReducer(state: GameState, action: ReducerAction): GameState {
+  let currentMatrice
   switch (action.type) {
     case "move":
+      currentMatrice = fp(populateEmptyTile(move(action.direction, state.matrice)))
       return {
         ...state,
-        matrice: fp(populateEmptyTile(move(action.direction, state.matrice))),
+        matrice: currentMatrice,
+        score: total(currentMatrice)
       };
 
     case "newGame":
-      return { ...initialState, matrice: fp(populateEmptyTile(initialState.matrice)) };
+      currentMatrice = fp(populateEmptyTile(initialState.matrice))
+      return { 
+        ...initialState,
+        matrice: currentMatrice,
+        score: total(currentMatrice)
+      };
   }
 }
 
