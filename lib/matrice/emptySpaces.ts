@@ -1,11 +1,13 @@
+import { fp } from "@/lib";
+
 export function populateEmptyTile(matrice: number[][]): number[][] {
     if (isFull(matrice)) return matrice
     
-    const emptyTiles = getEmptyTiles(matrice)
-    const newMatrice = [...matrice]
+    const newMatrice = fp(matrice)
+    const emptyTiles = getEmptyTiles(newMatrice)
     const selectedEmptyTileIndex = Math.floor(Math.random() * emptyTiles.length);
-    const selectedEmptyTile = emptyTiles[selectedEmptyTileIndex]
-    newMatrice[selectedEmptyTile[1]][selectedEmptyTile[0]] = getRandomValue()
+    const [x,y] = emptyTiles[selectedEmptyTileIndex]
+    newMatrice[y][x] = getRandomValue()
 
     return newMatrice
 }
