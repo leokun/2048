@@ -1,15 +1,17 @@
-export type Direction = 'up' | 'down' | 'left' | 'right'
+import { fp } from "@/lib"
+
+export type Direction = null | 'up' | 'down' | 'left' | 'right'
 
 export function move(direction: Direction, matrice: number[][]): number[][] {
-    let newMatrice: number[][] = matrice
+    let newMatrice: number[][] = fp(matrice)
 
     if (direction == 'up') {
         for(let column=0; column <4; column++) {
             let newColumn = slideNumbers([
-                matrice[0][column],
-                matrice[1][column],
-                matrice[2][column],
-                matrice[3][column],
+                newMatrice[0][column],
+                newMatrice[1][column],
+                newMatrice[2][column],
+                newMatrice[3][column],
             ])
             newMatrice[0][column] = newColumn[0]
             newMatrice[1][column] = newColumn[1]
@@ -20,10 +22,10 @@ export function move(direction: Direction, matrice: number[][]): number[][] {
     if (direction == 'down') {
         for(let column=0; column <4; column++) {
             let newColumn = slideNumbers([
-                matrice[3][column],
-                matrice[2][column],
-                matrice[1][column],
-                matrice[0][column],
+                newMatrice[3][column],
+                newMatrice[2][column],
+                newMatrice[1][column],
+                newMatrice[0][column],
             ])
             newMatrice[0][column] = newColumn[3]
             newMatrice[1][column] = newColumn[2]
@@ -33,12 +35,12 @@ export function move(direction: Direction, matrice: number[][]): number[][] {
     }
     if (direction == 'left') {
         for(let row=0; row <4; row++) {
-            newMatrice[row] = slideNumbers(matrice[row])
+            newMatrice[row] = slideNumbers(newMatrice[row])
         }
     }
     if (direction == 'right') {
         for(let row=0; row <4; row++) {
-            newMatrice[row] = slideNumbers(matrice[row].reverse()).reverse()
+            newMatrice[row] = slideNumbers(newMatrice[row].reverse()).reverse()
         }
     }
 

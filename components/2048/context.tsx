@@ -1,49 +1,82 @@
 import { isEmpty, populateEmptyTile } from "@/lib/matrice/emptySpaces";
 import { Direction, move } from "@/lib/matrice/move";
-import { PropsWithChildren, createContext, useEffect, useState } from "react";
+import {
+  PropsWithChildren,
+  createContext,
+  useEffect,
+  useReducer,
+  useState,
+} from "react";
+import Matrice from ".";
+import { fp } from "@/lib";
 
-type Matrice = number[][]
+type Matrice = number[][];
 
-type GameStore = {
-    matrice: Matrice
-    score: number
-}
+type GameState = {
+  matrice: Matrice;
+  score: number;
+};
 
-export const GameContext = createContext({matrice: null, score: 0})
+const initialState = {
+    matrice: [
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+    ],
+    score: 0,
+  }
 
-export function GameContextProvider({children}: PropsWithChildren) {
+export const GameContext = createContext<GameState>({ matrice: [], score: 0 });
 
-    const [gameStore, setGameStore] = useState({
-        matrice: [
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
-        [0, 0 ,0, 0],
-      ],
-      score: 0
-    })
-    
-      const handleKeyDown = (e: any | KeyboardEvent) => {
+export function GameContextProvider({ children }: PropsWithChildren) {
+  const [gameStore, dispatch] = useReducer(gameReducer, initialState );
+  const [direction, setDirection] = useState<Direction>(); 
+
+  useEffect(() => {
+    function handleKeyDown(e: any | KeyboardEvent) {
         if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
-          const key: string = e.key
-          const direction = key.substring(5).toLowerCase() as Direction
-          const newMatrice = move(direction, gameStore.matrice)
-          setGameStore({...gameStore, matrice: populateEmptyTile(newMatrice)})
+            const key: string = e.key;
+            const newDirection = key.substring(5).toLowerCase() as Direction;
+            setDirection(newDirection);
         }
-      }
-    
-      useEffect(() => {
-        document.addEventListener("keydown", handleKeyDown)
-    
-        // moved from default value of useState to avoid hydratation mismatch
-        isEmpty(gameStore.matrice) && setGameStore({...gameStore, matrice: populateEmptyTile(gameStore.matrice)})
-    
-        return () => document.removeEventListener("keydown", handleKeyDown)
-      }, [])
+    };
+    document.addEventListener("keydown", handleKeyDown);
 
+    console.log(`PuseEffect pre newGame ${gameStore.matrice}`)
+    // moved from default value of useState to avoid hydratation mismatch
+    isEmpty(gameStore.matrice) && dispatch({ type: "newGame" });
 
-    return <GameContext.Provider value={gameStore}>
-    {children}
-  </GameContext.Provider>
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
+  useEffect(() => {
+    if (direction) {
+         dispatch({ type: "move", direction })
+         setDirection(null)
+    }
+  }, [direction]);
+
+  return (
+    <GameContext.Provider value={gameStore}>{children}</GameContext.Provider>
+  );
 }
+
+type ReducerAction =
+  | { type: "move"; direction: Direction }
+  | { type: "newGame" };
+
+function gameReducer(state: GameState, action: ReducerAction): GameState {
+  switch (action.type) {
+    case "move":
+      return {
+        ...state,
+        matrice: fp(populateEmptyTile(move(action.direction, state.matrice))),
+      };
+
+    case "newGame":
+      return { ...initialState, matrice: fp(populateEmptyTile(initialState.matrice)) };
+  }
+}
+
 
