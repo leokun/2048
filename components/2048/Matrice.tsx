@@ -7,7 +7,7 @@ import { GameContext } from "./context";
 
 export default function Matrice() {
 
-  const {matrice} = useContext(GameContext)
+  const {state: {matrice}} = useContext(GameContext)
   return (
     <div
     className="grid grid-cols-4 gap-4 p-4 h-80 w-80 bg-slate-900">

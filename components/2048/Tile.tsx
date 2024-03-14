@@ -1,10 +1,6 @@
 'use client'
 import bgStiles from './Tile.module.css';
 
-type TileProps = {
-    value: number
-}
-
 export default function Tile({value}: TileProps) {
 
   return <div

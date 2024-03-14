@@ -1,9 +1,8 @@
 import { fp } from "@/lib"
 
-export type Direction = null | 'up' | 'down' | 'left' | 'right'
 
-export function move(direction: Direction, matrice: number[][]): number[][] {
-    let newMatrice: number[][] = fp(matrice)
+export function move(direction: Direction, matrice: Matrice): Matrice {
+    let newMatrice: Matrice = fp(matrice)
 
     if (direction == 'up') {
         for(let column=0; column <4; column++) {

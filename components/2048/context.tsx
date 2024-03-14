@@ -1,5 +1,3 @@
-import { isEmpty, populateEmptyTile } from "@/lib/matrice/emptySpaces";
-import { Direction, move } from "@/lib/matrice/move";
 import {
   PropsWithChildren,
   createContext,
@@ -7,30 +5,20 @@ import {
   useReducer,
   useState,
 } from "react";
-import Matrice from ".";
-import { fp } from "@/lib";
-import { total } from "@/lib/matrice/sub";
 
-type Matrice = number[][];
+import { isEmpty } from  "./lib";
+import { initialState } from "./constants";
+import { gameReducer } from "./reducer";
 
-type GameState = {
-  matrice: Matrice;
-  score: number;
-};
 
-const initialState = {
-    matrice: [
-      [0, 0, 0, 0],
-      [0, 0, 0, 0],
-      [0, 0, 0, 0],
-      [0, 0, 0, 0],
-    ],
-    score: 0,
-  }
-
-export const GameContext = createContext<GameState>({ matrice: [], score: 0 });
+export const GameContext = createContext<GameContextType>({
+  state: initialState,
+  dispatch: ()=>null}
+);
+  
 
 export function GameContextProvider({ children }: PropsWithChildren) {
+
   const [gameStore, dispatch] = useReducer(gameReducer, initialState );
   const [direction, setDirection] = useState<Direction>(); 
 
@@ -57,33 +45,6 @@ export function GameContextProvider({ children }: PropsWithChildren) {
   }, [direction]);
 
   return (
-    <GameContext.Provider value={gameStore}>{children}</GameContext.Provider>
+    <GameContext.Provider value={{state: gameStore, dispatch}}>{children}</GameContext.Provider>
   );
 }
-
-type ReducerAction =
-  | { type: "move"; direction: Direction }
-  | { type: "newGame" };
-
-function gameReducer(state: GameState, action: ReducerAction): GameState {
-  let currentMatrice
-  switch (action.type) {
-    case "move":
-      currentMatrice = fp(populateEmptyTile(move(action.direction, state.matrice)))
-      return {
-        ...state,
-        matrice: currentMatrice,
-        score: total(currentMatrice)
-      };
-
-    case "newGame":
-      currentMatrice = fp(populateEmptyTile(initialState.matrice))
-      return { 
-        ...initialState,
-        matrice: currentMatrice,
-        score: total(currentMatrice)
-      };
-  }
-}
-
-
