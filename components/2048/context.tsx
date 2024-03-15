@@ -17,13 +17,13 @@ export const GameContext = createContext<GameContextType>({
 );
   
 
-export function GameContextProvider({ children }: PropsWithChildren) {
+export function GameContextProvider({ children }: Readonly<PropsWithChildren>) {
 
   const [gameStore, dispatch] = useReducer(gameReducer, initialState );
   const [direction, setDirection] = useState<Direction>(); 
 
   useEffect(() => {
-    function handleKeyDown(e: any | KeyboardEvent) {
+    function handleKeyDown(e: KeyboardEvent) {
         if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
             const key: string = e.key;
             const newDirection = key.substring(5).toLowerCase() as Direction;

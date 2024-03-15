@@ -39,7 +39,7 @@ export function move(direction: Direction, matrice: Matrice): Matrice {
     }
     if (direction == 'right') {
         for(let row=0; row <4; row++) {
-            newMatrice[row] = slideNumbers(newMatrice[row].reverse()).reverse()
+            newMatrice[row] = slideNumbers(newMatrice[row].toReversed()).reverse()
         }
     }
 
