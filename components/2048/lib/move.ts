@@ -1,9 +1,8 @@
 import { fp } from "@/lib"
 
-export type Direction = null | 'up' | 'down' | 'left' | 'right'
 
-export function move(direction: Direction, matrice: number[][]): number[][] {
-    let newMatrice: number[][] = fp(matrice)
+export function move(direction: Direction, matrice: Matrice): Matrice {
+    let newMatrice: Matrice = fp(matrice)
 
     if (direction == 'up') {
         for(let column=0; column <4; column++) {
@@ -40,7 +39,7 @@ export function move(direction: Direction, matrice: number[][]): number[][] {
     }
     if (direction == 'right') {
         for(let row=0; row <4; row++) {
-            newMatrice[row] = slideNumbers(newMatrice[row].reverse()).reverse()
+            newMatrice[row] = slideNumbers(newMatrice[row].toReversed()).reverse()
         }
     }
 
