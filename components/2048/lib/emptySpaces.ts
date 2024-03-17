@@ -1,4 +1,5 @@
 import { fp } from "@/lib";
+import { move } from ".";
 
 let lastCall: LastCall
 export function populateEmptyTile(matrice: Matrice, forceNew: boolean = false): Matrice {
@@ -26,6 +27,15 @@ export function isEmpty(matrice: Matrice): boolean {
 
 export function isFull(matrice: Matrice): boolean {
     return getEmptyTiles(matrice).length == 0
+}
+
+export function isGameOver(matrice: Matrice): boolean {
+    return (
+        isFull(move('up', matrice)) &&
+        isFull(move('down', matrice)) &&
+        isFull(move('left', matrice)) &&
+        isFull(move('right', matrice))
+    )
 }
 
 

@@ -1,4 +1,4 @@
-import { isEmpty, isFull, populateEmptyTile } from "./emptySpaces";
+import { isEmpty, isFull, isGameOver, populateEmptyTile } from "./emptySpaces";
 import { move } from "./move";
 import { total } from "./sub";
 
@@ -7,5 +7,6 @@ export {
     move,
     populateEmptyTile,
     isEmpty,
-    isFull
+    isFull,
+    isGameOver
 }

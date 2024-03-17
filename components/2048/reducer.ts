@@ -1,6 +1,6 @@
 import { fp } from "@/lib";
 import { initialState } from "./constants";
-import { isFull, move, populateEmptyTile, total } from "./lib";
+import { isFull, isGameOver, move, populateEmptyTile, total } from "./lib";
 
 
 
@@ -27,7 +27,7 @@ export function gameReducer(state: GameState, action: ReducerAction): GameState 
       return {
         matrice: currentMatrice,
         score: total(currentMatrice),
-        endOfGame: isFull(currentMatrice),
+        endOfGame: isFull(currentMatrice) && isGameOver(currentMatrice),
       }
     }
       
