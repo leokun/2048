@@ -1,18 +1,18 @@
 import { useContext } from "react"
 
 import { GameContext } from "./context"
+import { Button } from "@/components/ui"
 
 export default function NewGame() {
 
     const {dispatch} = useContext(GameContext)
 
-    return <button
-        className="p4 h-12 bg-slate-900 flex items-center justify-center text-3xl box-content"
+    return <Button
         onClick={() => {
             dispatch({type: "newGame"})
         }}
     >
         Reset Game
-    </button>
+    </Button>
 
 }

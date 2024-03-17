@@ -1,6 +1,6 @@
 import { fp } from "@/lib";
 import { initialState } from "./constants";
-import { move, populateEmptyTile, total } from "./lib";
+import { isFull, isGameOver, move, populateEmptyTile, total } from "./lib";
 
 
 
@@ -27,6 +27,7 @@ export function gameReducer(state: GameState, action: ReducerAction): GameState 
       return {
         matrice: currentMatrice,
         score: total(currentMatrice),
+        endOfGame: isFull(currentMatrice) && isGameOver(currentMatrice),
       }
     }
       
@@ -36,6 +37,7 @@ export function gameReducer(state: GameState, action: ReducerAction): GameState 
       return { 
         matrice: currentMatrice,
         score: total(currentMatrice),
+        endOfGame: false,
       }
     }
 
@@ -43,6 +45,7 @@ export function gameReducer(state: GameState, action: ReducerAction): GameState 
       currentMatrice = fp(populateEmptyTile(action.state.matrice, true))
       
       return { 
+        ...action.state,
         matrice: currentMatrice,
         score: total(currentMatrice),
       }

@@ -6,4 +6,5 @@ export const initialState: GameState ={
       [0, 0, 0, 0],
     ],
     score: 0,
+    endOfGame: false
 }
