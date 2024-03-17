@@ -5,11 +5,17 @@ import { move, populateEmptyTile, total } from "./lib";
 
 
 export function gameReducer(state: GameState, action: ReducerAction): GameState {
+  
+  let actionInfo = action.type
+  if (action.type == 'move') actionInfo += ` ${action.direction}`
+  console.info(`trigger action: ${actionInfo}`)
+
 
   let currentMatrice = state.matrice
   switch (action.type) {
     
     case "move": {
+
       const prevStringified = JSON.stringify(state.matrice)
       const newMatrice = move(action.direction, state.matrice)
 
@@ -19,17 +25,24 @@ export function gameReducer(state: GameState, action: ReducerAction): GameState 
       }
 
       return {
-        ...state,
         matrice: currentMatrice,
         score: total(currentMatrice),
       }
     }
       
     case "newGame": {
-      console.log('new game')
       currentMatrice = fp(populateEmptyTile(initialState.matrice, true))
+      
       return { 
-        ...initialState,
+        matrice: currentMatrice,
+        score: total(currentMatrice),
+      }
+    }
+
+    case "loadGame": {
+      currentMatrice = fp(populateEmptyTile(action.state.matrice, true))
+      
+      return { 
         matrice: currentMatrice,
         score: total(currentMatrice),
       }
