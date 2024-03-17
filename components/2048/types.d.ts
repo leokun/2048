@@ -4,6 +4,7 @@ type Direction = null | 'up' | 'down' | 'left' | 'right'
 type GameState = {
   matrice: Matrice;
   score: number;
+  endOfGame: boolean
 };
 
 type ReducerAction =
