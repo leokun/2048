@@ -19,7 +19,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <div className="grid grid-cols-1  gap-0 place-items-center">
+          {children}
+        </div>
+      </body>
       <SpeedInsights />
     </html>
   );

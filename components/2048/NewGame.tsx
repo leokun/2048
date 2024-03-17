@@ -12,7 +12,7 @@ export default function NewGame() {
             dispatch({type: "newGame"})
         }}
     >
-        Reset Game
+        New Game
     </Button>
 
 }
