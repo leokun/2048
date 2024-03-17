@@ -1,6 +1,6 @@
 import { fp } from "@/lib";
 import { initialState } from "./constants";
-import { isFull, isGameOver, move, populateEmptyTile, total } from "./lib";
+import { isFull, isGameOver, move, populateEmptyTile } from "./lib";
 
 
 
@@ -17,7 +17,8 @@ export function gameReducer(state: GameState, action: ReducerAction): GameState 
     case "move": {
 
       const prevStringified = JSON.stringify(state.matrice)
-      const newMatrice = move(action.direction, state.matrice)
+      const [newMatrice, scoreIncrement] = move(action.direction, state.matrice)
+      console.log(scoreIncrement)
 
       // matrice should stay the same if no move possible
       if (JSON.stringify(newMatrice) != prevStringified){
@@ -26,7 +27,7 @@ export function gameReducer(state: GameState, action: ReducerAction): GameState 
 
       return {
         matrice: currentMatrice,
-        score: total(currentMatrice),
+        score: state.score + scoreIncrement,
         endOfGame: isFull(currentMatrice) && isGameOver(currentMatrice),
       }
     }
@@ -36,7 +37,7 @@ export function gameReducer(state: GameState, action: ReducerAction): GameState 
       
       return { 
         matrice: currentMatrice,
-        score: total(currentMatrice),
+        score: 0,
         endOfGame: false,
       }
     }
@@ -47,7 +48,6 @@ export function gameReducer(state: GameState, action: ReducerAction): GameState 
       return { 
         ...action.state,
         matrice: currentMatrice,
-        score: total(currentMatrice),
       }
     }
 
