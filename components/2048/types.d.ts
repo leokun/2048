@@ -9,6 +9,7 @@ type GameState = {
 type ReducerAction =
   | { type: "move", direction: Direction }
   | { type: "newGame" }
+  | { type: "loadGame", state: GameState}
 
 type GameContextType = {
   state: GameState,

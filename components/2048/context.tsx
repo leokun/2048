@@ -2,6 +2,7 @@ import {
   PropsWithChildren,
   createContext,
   useEffect,
+  useMemo,
   useReducer,
   useState,
 } from "react";
@@ -9,6 +10,7 @@ import {
 import { isEmpty } from  "./lib";
 import { initialState } from "./constants";
 import { gameReducer } from "./reducer";
+import { useEventListener, useLocalStorage } from "usehooks-ts";
 
 
 export const GameContext = createContext<GameContextType>({
@@ -22,19 +24,19 @@ export function GameContextProvider({ children }: Readonly<PropsWithChildren>) {
   const [gameStore, dispatch] = useReducer(gameReducer, initialState );
   const [direction, setDirection] = useState<Direction>(); 
 
+  const [localStorage, setLocalStorage] = useLocalStorage<GameState | null>('2048-state', null)
+
+  useEventListener('keydown',(e: KeyboardEvent) => {
+    if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
+        const key: string = e.key;
+        const newDirection = key.substring(5).toLowerCase() as Direction;
+        setDirection(newDirection);
+    }
+  })
+
   useEffect(() => {
-    function handleKeyDown(e: KeyboardEvent) {
-        if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
-            const key: string = e.key;
-            const newDirection = key.substring(5).toLowerCase() as Direction;
-            setDirection(newDirection);
-        }
-    };
-    document.addEventListener("keydown", handleKeyDown);
-
-    isEmpty(gameStore.matrice) && dispatch({ type: "newGame" });
-
-    return () => document.removeEventListener("keydown", handleKeyDown);
+    if (localStorage) dispatch({ type: "loadGame", state: localStorage})
+    else if (isEmpty(gameStore.matrice)) dispatch({ type: "newGame" })
   }, []);
 
   useEffect(() => {
@@ -42,9 +44,12 @@ export function GameContextProvider({ children }: Readonly<PropsWithChildren>) {
          dispatch({ type: "move", direction })
          setDirection(null)
     }
+    else setLocalStorage(gameStore)
   }, [direction]);
 
+  const providerValue = useMemo(() => ({state: gameStore, dispatch}), [gameStore, dispatch])
+  
   return (
-    <GameContext.Provider value={{state: gameStore, dispatch}}>{children}</GameContext.Provider>
+    <GameContext.Provider value={providerValue}>{children}</GameContext.Provider>
   );
 }
