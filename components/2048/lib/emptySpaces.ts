@@ -30,11 +30,15 @@ export function isFull(matrice: Matrice): boolean {
 }
 
 export function isGameOver(matrice: Matrice): boolean {
+    const [upMatrice] = move('up', matrice)
+    const [downMatrice] = move('down', matrice)
+    const [leftMatrice] = move('left', matrice)
+    const [rightMatrice] = move('right', matrice)
     return (
-        isFull(move('up', matrice)) &&
-        isFull(move('down', matrice)) &&
-        isFull(move('left', matrice)) &&
-        isFull(move('right', matrice))
+        isFull(upMatrice) &&
+        isFull(downMatrice) &&
+        isFull(leftMatrice) &&
+        isFull(rightMatrice)
     )
 }
 
