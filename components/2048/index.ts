@@ -4,12 +4,4 @@ import Score from "./Score";
 import Tile from "./Tile";
 import { GameContext, GameContextProvider } from "./context";
 
-export { 
-    Matrice,
-    NewGame,
-    Score,
-    Tile,
-
-    GameContext,
-    GameContextProvider
-}
+export { Matrice, NewGame, Score, Tile, GameContext, GameContextProvider };
