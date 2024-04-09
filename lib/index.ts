@@ -1,3 +1,3 @@
 import { fp } from "./purify";
 
-export {fp}
+export { fp };

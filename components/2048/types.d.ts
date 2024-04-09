@@ -1,24 +1,26 @@
 type Matrice = number[][];
-type Direction = null | 'up' | 'down' | 'left' | 'right'
+type Direction = null | "up" | "down" | "left" | "right";
 
 type GameState = {
   matrice: Matrice;
   score: number;
-  endOfGame: boolean
+  endOfGame: boolean;
 };
 
 type ReducerAction =
-  | { type: "move", direction: Direction }
+  | { type: "move"; direction: Direction }
   | { type: "newGame" }
-  | { type: "loadGame", state: GameState}
+  | { type: "loadGame"; state: GameState };
+
+type dispatchFunction = (action: ReducerAction) => void;
 
 type GameContextType = {
-  state: GameState,
-  dispatch: Function
-}
+  state: GameState;
+  dispatch: dispatchFunction;
+};
 
-type LastCall = {matrice: string, result: Matrice}
+type LastCall = { matrice: string; result: Matrice };
 
 type TileProps = {
-  value: number
-}
+  value: number;
+};

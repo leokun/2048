@@ -1,18 +1,18 @@
-import { useContext } from "react"
+import { useContext } from "react";
 
-import { GameContext } from "./context"
-import { Button } from "@/components/ui"
+import { Button } from "@/components/ui";
+import { GameContext } from "./context";
 
 export default function NewGame() {
+  const { dispatch } = useContext(GameContext);
 
-    const {dispatch} = useContext(GameContext)
-
-    return <Button
-        onClick={() => {
-            dispatch({type: "newGame"})
-        }}
+  return (
+    <Button
+      onClick={() => {
+        dispatch({ type: "newGame" });
+      }}
     >
-        New Game
+      New Game
     </Button>
-
+  );
 }
