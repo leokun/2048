@@ -17,12 +17,14 @@ export default function useSwipe() {
   }
 
   useEventListener("touchstart", (e) => {
+    e.preventDefault();
     const { clientX, clientY } = getTouches(e);
     xDown = clientX;
     yDown = clientY;
   });
 
   useEventListener("touchend", (e) => {
+    e.preventDefault();
     const { clientX, clientY } = getTouches(e);
     xDiff = xDown - clientX;
     yDiff = yDown - clientY;
