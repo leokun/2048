@@ -11,6 +11,7 @@ import { useEventListener, useLocalStorage } from "usehooks-ts";
 import { initialState } from "./constants";
 import { isEmpty } from "./lib";
 import { gameReducer } from "./reducer";
+import useSwipe from "@/hooks/Swipe";
 
 export const GameContext = createContext<GameContextType>({
   state: initialState,
@@ -20,6 +21,7 @@ export const GameContext = createContext<GameContextType>({
 export function GameContextProvider({ children }: Readonly<PropsWithChildren>) {
   const [gameStore, dispatch] = useReducer(gameReducer, initialState);
   const [direction, setDirection] = useState<Direction>();
+  const swipeDirection = useSwipe();
 
   const [localStorage, setLocalStorage] = useLocalStorage<GameState | null>(
     "2048-state",
@@ -48,6 +50,12 @@ export function GameContextProvider({ children }: Readonly<PropsWithChildren>) {
       setDirection(null);
     } else setLocalStorage(gameStore);
   }, [direction, gameStore, setLocalStorage]);
+
+  useEffect(() => {
+    if (swipeDirection) {
+      dispatch({ type: "move", direction: swipeDirection });
+    }
+  }, [swipeDirection]);
 
   const providerValue = useMemo(
     () => ({ state: gameStore, dispatch }),
