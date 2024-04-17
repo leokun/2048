@@ -1,11 +1,30 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useEventListener } from "usehooks-ts";
 
 /**
+ * Custom hook for handling swipe gestures.   
+ * Carrefull it depends on `usehooks-ts` => `npm install usehooks-ts`
+ * 
+ * Inspired from Stackoverflow
+ * @link https://stackoverflow.com/a/23230280
+ * 
+ * @param {Function} customHandleSwipe - an optional function to handle swipe direction
+ * @return {Direction} the current direction of the swipe
+ * 
+ * @example
+ * export default function OneDirection() {
+ *   // This component will render only if direction is different from last one
+ *   const direction = useSwipe();
  *
- * inspired from https://stackoverflow.com/a/23230280
+ *   // This way you may log every swipes
+ *   useSwipe((direction) => console.log(direction));
+ *
+ *   return <div>{direction}</div>;
+ * }
  */
-export default function useSwipe() {
+export default function useSwipe(
+  customHandleSwipe?: (direction: Direction) => void,
+) {
   const [direction, setDirection] = useState<Direction>(null);
   let xDown = 0;
   let yDown = 0;
@@ -16,12 +35,21 @@ export default function useSwipe() {
     return evt.touches[0] || evt.changedTouches[0];
   }
 
+  function handleSwipe(direction: Direction) {
+    setDirection(direction);
+    if (customHandleSwipe) customHandleSwipe(direction);
+  }
+
   useEventListener("touchstart", (e) => {
     e.preventDefault();
     const { clientX, clientY } = getTouches(e);
     xDown = clientX;
     yDown = clientY;
   });
+
+  useEffect(() => {
+    console.log("direction", direction);
+  }, [direction]);
 
   useEventListener("touchend", (e) => {
     e.preventDefault();
@@ -31,15 +59,15 @@ export default function useSwipe() {
 
     if (Math.abs(xDiff) > Math.abs(yDiff)) {
       if (xDiff > 0) {
-        setDirection("left");
+        handleSwipe("left");
       } else {
-        setDirection("right");
+        handleSwipe("right");
       }
     } else {
       if (yDiff > 0) {
-        setDirection("up");
+        handleSwipe("up");
       } else {
-        setDirection("down");
+        handleSwipe("down");
       }
     }
     /* reset values */

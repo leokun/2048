@@ -21,7 +21,9 @@ export const GameContext = createContext<GameContextType>({
 export function GameContextProvider({ children }: Readonly<PropsWithChildren>) {
   const [gameStore, dispatch] = useReducer(gameReducer, initialState);
   const [direction, setDirection] = useState<Direction>();
-  const swipeDirection = useSwipe();
+  useSwipe( (direction) =>
+    dispatch({ type: "move", direction: direction }),
+  );
 
   const [localStorage, setLocalStorage] = useLocalStorage<GameState | null>(
     "2048-state",
@@ -51,11 +53,11 @@ export function GameContextProvider({ children }: Readonly<PropsWithChildren>) {
     } else setLocalStorage(gameStore);
   }, [direction, gameStore, setLocalStorage]);
 
-  useEffect(() => {
+  /*useEffect(() => {
     if (swipeDirection) {
       dispatch({ type: "move", direction: swipeDirection });
     }
-  }, [swipeDirection]);
+  }, [swipeDirection]);*/
 
   const providerValue = useMemo(
     () => ({ state: gameStore, dispatch }),
